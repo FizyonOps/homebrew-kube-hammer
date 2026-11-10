@@ -11,3 +11,7 @@ The cask installs the signed and notarized DMG from the same bucket the app's ow
 Upgrade with `brew upgrade --cask kube-hammer`, or let the app update itself (`auto_updates true`).
 
 The Community edition is free for individuals and companies of any size. Pro is $7/month or $70/year. Plans: https://hammer.fizyonops.com/#pricing
+
+## How the cask stays current
+
+Every stable desktop tag (`vX.Y.Z`) runs the `homebrew-tap` job in the app repository's release workflow. It hashes the two notarized DMGs the macOS build uploaded, rewrites `Casks/kube-hammer.rb` (`version`, `sha256 arm:`, `sha256 intel:`) and pushes here with a write deploy key. Prereleases never reach the cask. The same script runs by hand as a fallback: `node scripts/bump-homebrew-cask.mjs --version X.Y.Z --tap <this checkout> --commit --push` from the app repository.
